@@ -3,14 +3,17 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import{HeaderComponent} from '../header.component/header.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,HeaderComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,MatButtonModule,MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]
