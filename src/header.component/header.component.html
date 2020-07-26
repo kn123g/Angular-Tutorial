@@ -1,7 +1,21 @@
-<button mat-button (click)="onButtonClick()">header</button>
-
-<p>{{message}}</p>
 
 
-<textarea  [value] = "message"></textarea>
-<button mat-button (click)="onButtonClick()">Submit</button>
+
+<div id ="toolbar">
+  <mat-toolbar color="primary">
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span >My App</span>
+  <span class="example-spacer"></span>
+  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+    <mat-icon>favorite</mat-icon>
+  </button>
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+    <mat-icon>share</mat-icon>
+  </button>
+</mat-toolbar>
+</div>
+
+
+

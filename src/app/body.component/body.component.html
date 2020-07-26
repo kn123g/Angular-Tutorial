@@ -1,0 +1,27 @@
+<div>
+  <!--<main> -->
+    <div>
+    <button mat-raised-button color="accent" (click)="onButtonClick()">click</button>
+    <p>{{message}}</p>
+    <mat-form-field  class="example-full-width">
+      <mat-label>TWO WAY BINDING</mat-label>
+      <textarea   matInput [(ngModel)] = "twoWayBinding"   ></textarea>
+
+    </mat-form-field>
+    <p>{{twoWayBinding}}</p>
+  </div>
+
+<div>
+
+  <center>
+  <mat-card class="example-card-width">
+    <mat-form-field class="example-full-width" >
+      <textarea    matInput ></textarea>
+    </mat-form-field>
+    <button  mat-raised-button color="accent" (click)="onSubmitButtonClick()">Submit</button>
+  </mat-card>
+  </center>
+   <!--</main> -->
+</div>
+
+</div>
