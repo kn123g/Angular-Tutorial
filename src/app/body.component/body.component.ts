@@ -1,5 +1,7 @@
 import { Component,NgModule } from '@angular/core';
-import {MatButtonModule} from '@angular/material/button';
+import {Post} from '../post/post.model';
+
+
 
 
 @Component({
@@ -10,19 +12,12 @@ import {MatButtonModule} from '@angular/material/button';
 
 
 export class BodyComponent {
-  title = 'BodyComponent';
-    message : string ='';
-    twoWayBinding='';
-    twoWayBindingpara = '';
-  onButtonClick(){
-      this.message ="welcome";
+post : Post[] = [];
+
+  receviedPost(rPost)
+  {
+    this.post.push(rPost);
+    console.log(rPost);
   }
-  onSubmitButtonClick(){
-    this.message ="Submitted";
-}
-OnTwoway()
-{
-  this.twoWayBindingpara = this.twoWayBinding;
-}
 
 }

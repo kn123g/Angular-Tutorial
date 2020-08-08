@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import {HttpClientModule} from "@angular/common/http";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {MatButtonModule} from '@angular/material/button';
@@ -13,9 +13,14 @@ import {MatInputModule} from '@angular/material/input';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import { BodyComponent } from './body.component/body.component';
+import { CardComponent } from './card/card.component';
+import { PostComponent } from './post/post.component';
+import { FormPostComponent } from './formPost/post/post.component';
+import { FormCardComponent } from './formPost/card/card.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 @NgModule({
   declarations: [
-    AppComponent,HeaderComponent, BodyComponent
+    AppComponent,HeaderComponent, BodyComponent, CardComponent, PostComponent,FormCardComponent,FormPostComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +31,9 @@ import { BodyComponent } from './body.component/body.component';
     MatCardModule,
 MatInputModule,
 MatToolbarModule,
-MatIconModule
+MatIconModule,
+MatExpansionModule,
+HttpClientModule
 
   ],
   providers: [],

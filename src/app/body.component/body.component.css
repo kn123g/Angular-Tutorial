@@ -1,8 +1,16 @@
 
-.example-full-width {
-  width: 100%;
+main{
+  width:50%;
+
 }
-.example-card-width {
-  width: 80%;
+app-post{
+  margin-top: 2rem;
+  display: block;
 }
+app-form-post{
+  margin-top: 2rem;
+  display: block;
+}
+
+
 
