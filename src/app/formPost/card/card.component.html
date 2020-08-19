@@ -1,23 +1,28 @@
 
   <mat-card class="example-card-width">
-      <form (submit)="onSubmitButtonClick(cardForm)" #cardForm="ngForm">
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+      <form (submit)="onSubmitButtonClick(cardForm)" #cardForm="ngForm" *ngIf="!isLoading">
          <mat-form-field class="example-full-width" >
             <input
+            [ngModel] = "post?.title"
             type = "text"
             name = "title"
             matInput ngModel required
             minlength="3"
             #title="ngModel"
-            placeholder="Title">
+            placeholder="Title"
+           >
             <mat-error *ngIf="title.invalid">Please Enter the title with maximum len 3</mat-error>
          </mat-form-field>
          <mat-form-field class="example-full-width">
              <textarea
+             [ngModel] = "post?.content"
              matInput name = "content"
              ngModel required
              #content="ngModel"
              minlength="7"
-             placeholder="Content">
+             placeholder="Content"
+             >
             </textarea>
             <mat-error *ngIf="content.invalid">Please Enter the content with maximum len 7</mat-error>
           </mat-form-field>
