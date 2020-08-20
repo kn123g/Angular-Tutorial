@@ -17,12 +17,21 @@ import { BodyComponent } from './body.component/body.component';
 import { CardComponent } from './card/card.component';
 import { PostComponent } from './post/post.component';
 import { FormPostComponent } from './formPost/post/post.component';
+import { FormImagePostComponent } from './formPost/postWImage/post.image.component';
 import { FormCardComponent } from './formPost/card/card.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { ReactiveCardComponent } from './formPost/reactive-card/reactive-card.component';
 @NgModule({
   declarations: [
-    AppComponent,HeaderComponent, BodyComponent, CardComponent, PostComponent,FormCardComponent,FormPostComponent, ReactiveCardComponent
+    AppComponent,
+    HeaderComponent, 
+    BodyComponent, 
+    CardComponent, 
+    PostComponent,
+    FormCardComponent,
+    FormPostComponent, 
+    ReactiveCardComponent,
+    FormImagePostComponent
   ],
   imports: [
     BrowserModule,

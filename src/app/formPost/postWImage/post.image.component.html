@@ -1,0 +1,28 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-accordion multi="true" *ngIf="posts.length > 0 &&  !isLoading">
+
+  <mat-expansion-panel *ngFor="let post of posts" (opened)="panelOpenState = true"
+                       (closed)="panelOpenState = false" >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ post.title}}
+      </mat-panel-title>
+      <mat-panel-description>
+        Currently I am {{panelOpenState ? 'open' : 'closed'}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <center>
+      <div class="post-image">
+        <img [src]="post.image" [alt]="post.title">
+      </div>
+    
+    {{ post.content}}
+    <mat-action-row>
+      <button mat-button color="primary" [routerLink] ='["/edit",post.id]' >Edit</button> <!--(click)=""-->
+      <button mat-button color="warn"  (click)="onDelete(post.id)" >Delete</button> <!--(click)=""-->
+    </mat-action-row>
+  </center>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<h3 *ngIf = "posts.length <= 0 ">No post to display</h3>

@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const Post = require("../Models/post");
+const PostWImage = require("../Models/postWImage");
 const multer = require("multer");
 
 const MIME_TYPE_MAP = {
@@ -54,17 +55,25 @@ router.post("/",(req,res)=>{
   });
 });
 router.post("/reactive",  multer({ storage: storage }).single("image"),(req,res)=>{
-  const post = new Post({
+  const url = req.protocol + "://" + req.get("host");
+  const post = new PostWImage({
     title : req.body.title,
-    content : req.body.content
+    content : req.body.content,
+    image: url + "/images/" + req.file.filename
   });
-  post.save();
+  console.log("posts.js => file path : " +url + "/images/" + req.file.filename)
+  post.save().then( createdPost => {
+    res.status(201).json({
+      message: "Post added successfully",
+      post: {
+        ...createdPost,
+        id: createdPost._id
+      }
+    });
+  });
   console.log(post);
-  res.status(201).json({
-    message:'post added successfully',
-    id:post._id
-  });
-});
+ });  
+
 router.put("/:id",(req,res)=>{
     const post = new Post({
       _id : req.body.id,
@@ -87,6 +96,7 @@ Post.updateOne({_id:req.params.id},post).then(result=>{
   res.status(200).json({message: "update successfull"});
 });
 });
+
 router.get("/",(req,res,next)=> {
     console.log("First Gateway");
     Post.find().then(documets=>{
@@ -98,6 +108,19 @@ router.get("/",(req,res,next)=> {
       next();
     });
 });
+
+router.get("/image",(req,res,next)=> {
+  console.log("First Gateway");
+  PostWImage.find().then(documets=>{
+    console.log(documets);
+    res.status(200).json({
+      message : "Post fetched Successfully",
+      posts : documets
+    });
+    next();
+  });
+});
+
 router.get("/edit/:id", (req, res, next) => {
   console.log("posts.js => " +req.params.id);
   Post.findById(req.params.id).then(post => {
@@ -112,6 +135,13 @@ router.get("/edit/:id", (req, res, next) => {
 router.delete("/:id",(req,res,next)=> {
   console.log("router.js => deleting uuid");
   Post.deleteOne({_id:req.params.id}).then(result => {
+    res.status(200).json({message:"Post deleted"});
+  })
+});
+
+router.delete("/image/:id",(req,res,next)=> {
+  console.log("router.js => deleting image uuid");
+  PostWImage.deleteOne({_id:req.params.id}).then(result => {
     res.status(200).json({message:"Post deleted"});
   })
 });
