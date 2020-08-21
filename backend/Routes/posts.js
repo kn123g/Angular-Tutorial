@@ -85,14 +85,16 @@ router.put("/:id",(req,res)=>{
     res.status(200).json({message: "update successfull"});
   });
 });
-router.put("/reactive/:id",(req,res)=>{
-  const post = new Post({
+router.put("/reactive/:id",  multer({ storage: storage }).single("image"),(req,res)=>{
+  const url = req.protocol + "://" + req.get("host");
+  const post = new PostWImage({
     _id : req.body.id,
     title : req.body.title,
-    content : req.body.content
+    content : req.body.content,
+    image: url + "/images/" + req.file.filename
   });
   console.log("router.js = > updating");
-Post.updateOne({_id:req.params.id},post).then(result=>{
+  PostWImage.updateOne({_id:req.params.id},post).then(result=>{
   res.status(200).json({message: "update successfull"});
 });
 });
@@ -124,6 +126,17 @@ router.get("/image",(req,res,next)=> {
 router.get("/edit/:id", (req, res, next) => {
   console.log("posts.js => " +req.params.id);
   Post.findById(req.params.id).then(post => {
+    if (post) {
+      console.log("posts.js => " +post);
+      res.status(200).json(post);
+    } else {
+      res.status(404).json({ message: "Post not found!" });
+    }
+  });
+});
+router.get("/editImage/:id", (req, res, next) => {
+  console.log("posts.js editImage=> " +req.params.id);
+  PostWImage.findById(req.params.id).then(post => {
     if (post) {
       console.log("posts.js => " +post);
       res.status(200).json(post);

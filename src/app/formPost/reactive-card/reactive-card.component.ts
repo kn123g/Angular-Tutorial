@@ -5,6 +5,7 @@ import {PostService} from '../post.service';
 import {ActivatedRoute,ParamMap,Route} from '@angular/router';
 import { mimeType } from "./mime-type.validator";
 import { Content } from '@angular/compiler/src/render3/r3_ast';
+import {PostImage} from '../postWImage/post.image.model';
 @Component({
   selector: 'app-reactive-card',
   templateUrl: './reactive-card.component.html',
@@ -13,7 +14,7 @@ import { Content } from '@angular/compiler/src/render3/r3_ast';
 export class ReactiveCardComponent implements OnInit {
   private mode = "create";
   private postId = "";
-  public post : Post ;
+  public post : PostImage ;
   public isLoading = true;
   public form : FormGroup;
   public imagePreview : string;
@@ -70,14 +71,14 @@ onImagePickedUp(event :Event)
       if(paramMap.has('postId')){
           this.mode='edit';
           this.postId = paramMap.get("postId");
-
-          this.postService.getPostForEdit(this.postId).subscribe(receivedPost=>{
+          this.postService.getPostImageForEdit(this.postId).subscribe(receivedPost=>{
             console.log("card.component.ts => " + "postId: " +this.postId  );
             console.log(receivedPost);
             this.post = receivedPost;
             this.form.setValue({'title' : this.post.title,
             'content' : this.post.content,
-            'image' : null});
+            'image' : this.post.image});
+            this.imagePreview = this.post.image;
             this.isLoading =false;
           });
       }

@@ -44,6 +44,12 @@ export class PostService{
       "http://localhost:3000/api/posts/edit/" + id
     );
   }
+  getPostImageForEdit(id: string) {
+
+    return this.http.get<{ id: string; title: string; content: string,image: string }>(
+      "http://localhost:3000/api/posts/editImage/" + id
+    );
+  }
   addPost(title :string ,content :string){
       const post : Post = {id:null,title : title,content:content};
       console.log("post.service.ts => posting data   " + post.title + "   " +post.content);
@@ -115,19 +121,41 @@ addReactivePost(title :string ,content :string,image : File){
   });
 
 }
-updateReactivePost(id:string ,title :string ,content :string,image : File){
-  const post : Post = {id:id,title : title,content:content};
-  console.log("post.service.ts => updating data   " + post.title + "   " +post.content);
+updateReactivePost(id:string ,title :string ,content :string,image : File  | string){
+    let post : PostImage | FormData ;
+  if (typeof image === "object") {
+    post = new FormData();
+    post.append("id", id);
+    post.append("title", title);
+    post.append("content", content);
+    post.append("image", image, title);
+  } else {
+    post = {
+      id: id,
+      title: title,
+      content: content,
+      image: image
+    };
+  }
+  console.log("post.service.ts => updating data   " + title + "   " +content);
   this.http.put<{message:string}>('http://localhost:3000/api/posts/reactive/' + id,post).
   subscribe((responseData)=>{
+    
+
       console.log("post.service = > updating");
       console.log(responseData.message);
-      const updatedPost = [...this.posts];
-      const oldestPost = updatedPost.findIndex (p=> p.id ===post.id);
+      const updatedPost = [...this.postsImage];
+      const oldestPost = updatedPost.findIndex (p=> p.id ===id);
+      const post: PostImage = {
+        id: id,
+        title: title,
+        content: content,
+        image: ""
+      };
       updatedPost[oldestPost] = post;
       this.posts=updatedPost;
-      this.postUpdated.next([...this.posts]);
-      console.log(this.posts);
+      this.postUpdated.next([...this.postsImage]);
+      console.log(this.postsImage);
       this.route.navigate(["/message-image"]);
   });
 

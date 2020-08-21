@@ -10,6 +10,7 @@ const routes: Routes = [
   {path : 'create',component : FormCardComponent},
   {path : 'message',component : FormPostComponent},
   {path : 'edit/:postId',component : FormCardComponent},
+  {path : 'edit/reactive/:postId',component : ReactiveCardComponent},
   {path : 'reactivePostCreate',component : ReactiveCardComponent},
   {path : 'reactivePostCreate/:postId',component : ReactiveCardComponent},
   {path : 'message-image',component : FormImagePostComponent}
