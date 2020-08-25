@@ -13,7 +13,7 @@ export class PostService{
   private postUpdated  = new Subject<Post[]>();
 
   private postsImage : Post[] =[];
-  private postImageUpdated  = new Subject<Post[]>();
+  private postImageUpdated  = new Subject<{Post:Post[];postCount: number }>();
 
   constructor(private http:HttpClient,public route : Router){}
 
@@ -76,11 +76,15 @@ export class PostService{
   deletePostImage(postid:string){
     console.log("app.js => deleting uuid: " +postid);
     console.log("http://localhost:3000/api/posts/image/" + postid);
-    this.http.delete("http://localhost:3000/api/posts/image/" + postid).subscribe(()=>{
-        const updatedPosts = this.postsImage.filter(post=> post.id!== postid);
-        this.postsImage = updatedPosts;
-        this.postImageUpdated.next([...this.postsImage]);
-      });
+    return this.http.delete("http://localhost:3000/api/posts/image/" + postid);
+    //.subscribe(
+      //()=>{
+        // const updatedPosts = this.postsImage.filter(post=> post.id!== postid);
+        // this.postsImage = updatedPosts;
+        // this.postImageUpdated.next([...this.postsImage]);
+       
+      //}
+      //);
   }
   updatePost(id:string ,title :string ,content :string){
     const post : Post = {id:id,title : title,content:content};
@@ -111,12 +115,12 @@ addReactivePost(title :string ,content :string,image : File){
   subscribe((responseDataReactive)=>{
       console.log("posted");
       console.log(responseDataReactive.message);
-      const post : PostImage = {id:responseDataReactive.post.id,
-        title:responseDataReactive.post.title,
-        content:responseDataReactive.post.content,
-        image:responseDataReactive.post.image};
-      this.postsImage.push(post);
-      this.postImageUpdated.next([...this.postsImage]);
+      // const post : PostImage = {id:responseDataReactive.post.id,
+      //   title:responseDataReactive.post.title,
+      //   content:responseDataReactive.post.content,
+      //   image:responseDataReactive.post.image};
+      // this.postsImage.push(post);
+      // this.postImageUpdated.next([...this.postsImage]);
       this.route.navigate(["/message-image"]);
   });
 
@@ -128,7 +132,7 @@ updateReactivePost(id:string ,title :string ,content :string,image : File  | str
     post.append("id", id);
     post.append("title", title);
     post.append("content", content);
-    post.append("image", image, title);
+    post.append("image", image);
   } else {
     post = {
       id: id,
@@ -144,39 +148,51 @@ updateReactivePost(id:string ,title :string ,content :string,image : File  | str
 
       console.log("post.service = > updating");
       console.log(responseData.message);
-      const updatedPost = [...this.postsImage];
-      const oldestPost = updatedPost.findIndex (p=> p.id ===id);
-      const post: PostImage = {
-        id: id,
-        title: title,
-        content: content,
-        image: ""
-      };
-      updatedPost[oldestPost] = post;
-      this.posts=updatedPost;
-      this.postUpdated.next([...this.postsImage]);
-      console.log(this.postsImage);
+      // const updatedPost = [...this.postsImage];
+      // const oldestPost = updatedPost.findIndex (p=> p.id ===id);
+      // const post: PostImage = {
+      //   id: id,
+      //   title: title,
+      //   content: content,
+      //   image: ""
+      // };
+      // updatedPost[oldestPost] = post;
+      // this.posts=updatedPost;
+      // this.postUpdated.next([...this.postsImage]);
+      // console.log(this.postsImage);
       this.route.navigate(["/message-image"]);
   });
 
 }
 
-getPostImage(){
+getPostImage(postPerPage : number,currentPage : number){
+
+  const queryParams = `?pagesize=${postPerPage}&currentpage=${currentPage}`;
   //return [...this.posts]; ///copying array//return [...this.posts]; -> this pass reference address
-  this.http.get<{message:string,posts:any[]}>('http://localhost:3000/api/posts/image').
-  pipe(map((postsData)=>{
-        return postsData.posts.map(post=>{
+  this.http.get<{message:string,posts:any[],maxPosts: number}>('http://localhost:3000/api/posts/image' 
+  + queryParams)
+  .pipe(
+    map(postData => {
+      return {
+        posts: postData.posts.map(post => {
           return {
-            id:post._id,
-            title:post.title,
-            content:post.content,
-            image:post.image
-          }
-        })
-  })).
+            title: post.title,
+            content: post.content,
+            id: post._id,
+            image: post.image
+          };
+        }),
+        maxPosts: postData.maxPosts
+      };
+    })
+  ).
   subscribe((tranformedPostsData)=>{
-      this.postsImage = tranformedPostsData;
-      this.postImageUpdated.next([...this.postsImage]);
+    console.log(tranformedPostsData);
+    this.postsImage = tranformedPostsData.posts;
+    this.postImageUpdated.next({
+      Post: [...this.postsImage],
+      postCount: tranformedPostsData.maxPosts
+    });
   });
 }
 getPosImageUpdatedListener(){

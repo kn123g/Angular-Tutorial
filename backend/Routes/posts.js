@@ -87,11 +87,16 @@ router.put("/:id",(req,res)=>{
 });
 router.put("/reactive/:id",  multer({ storage: storage }).single("image"),(req,res)=>{
   const url = req.protocol + "://" + req.get("host");
+  let imagePath = req.body.imagePath;
+  if (req.file) {
+    const url = req.protocol + "://" + req.get("host");
+    imagePath = url + "/images/" + req.file.filename
+  }
   const post = new PostWImage({
     _id : req.body.id,
     title : req.body.title,
     content : req.body.content,
-    image: url + "/images/" + req.file.filename
+    image: imagePath
   });
   console.log("router.js = > updating");
   PostWImage.updateOne({_id:req.params.id},post).then(result=>{
@@ -112,14 +117,26 @@ router.get("/",(req,res,next)=> {
 });
 
 router.get("/image",(req,res,next)=> {
-  console.log("First Gateway");
-  PostWImage.find().then(documets=>{
-    console.log(documets);
+  const pageSize = +req.query.pagesize;
+  const currentPage = +req.query.currentpage;
+  const postQuery = PostWImage.find();
+  let fetchedPosts;
+  if (pageSize && currentPage) {
+    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+  }
+
+  console.log("posts.js queryString => ");
+  console.log(req.query);
+  postQuery.then(documents => {
+    fetchedPosts = documents;
+    return PostWImage.count();
+  })
+  .then(count => {
     res.status(200).json({
-      message : "Post fetched Successfully",
-      posts : documets
+      message: "Posts fetched successfully!",
+      posts: fetchedPosts,
+      maxPosts: count
     });
-    next();
   });
 });
 

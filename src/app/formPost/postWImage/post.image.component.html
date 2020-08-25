@@ -11,7 +11,7 @@
         Currently I am {{panelOpenState ? 'open' : 'closed'}}
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <center>
+  <center>
       <div class="post-image">
         <img [src]="post.image" [alt]="post.title">
       </div>
@@ -24,5 +24,9 @@
   </center>
   </mat-expansion-panel>
 </mat-accordion>
-
-<h3 *ngIf = "posts.length <= 0 ">No post to display</h3>
+<mat-paginator [length]="totalPost"
+              [pageSize]="postPerPage"
+              [pageSizeOptions]="pageSizeOption"
+              (page) ="onPageChange($event)"  *ngIf="posts.length > 0" >
+</mat-paginator>
+<h3 *ngIf = "posts.length <= 0 && !isLoading">No post to display</h3>

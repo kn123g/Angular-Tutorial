@@ -11,7 +11,7 @@
         Currently I am {{panelOpenState ? 'open' : 'closed'}}
       </mat-panel-description>
     </mat-expansion-panel-header>
-    {{ post.content}}
+    {{ post.content }}
     <mat-action-row>
       <button mat-button color="primary" [routerLink] ='["/edit",post.id]' >Edit</button> <!--(click)=""-->
       <button mat-button color="warn"  (click)="onDelete(post.id)" >Delete</button> <!--(click)=""-->
@@ -19,4 +19,4 @@
   </mat-expansion-panel>
 </mat-accordion>
 
-<h3 *ngIf = "posts.length <= 0 ">No post to display</h3>
+<h3 *ngIf = "posts.length <= 0  && !isLoading">No post to display</h3>

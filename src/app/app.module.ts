@@ -21,6 +21,7 @@ import { FormImagePostComponent } from './formPost/postWImage/post.image.compone
 import { FormCardComponent } from './formPost/card/card.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { ReactiveCardComponent } from './formPost/reactive-card/reactive-card.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +48,8 @@ import { ReactiveCardComponent } from './formPost/reactive-card/reactive-card.co
     MatIconModule,
     MatExpansionModule,
     HttpClientModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatPaginatorModule
 
   ],
   providers: [],
