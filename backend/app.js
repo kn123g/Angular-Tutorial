@@ -4,6 +4,7 @@ const Post = require("./Models/post");
 const mongoose = require("mongoose");
 const app = express();
 const postRouter = require("./Routes/posts"); 
+const userRouter = require("./Routes/users"); 
 const path = require("path");
 
 app.use((req,res,next)=>{
@@ -19,4 +20,5 @@ app.use("/images", express.static(path.join("backend/images")));
 //app.use(cookieParser());
 //app.use(upload.array());
 app.use("/api/posts",postRouter);
+app.use("/api/user",userRouter);
 module.exports = app;
