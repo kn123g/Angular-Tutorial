@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const User = require("../Models/user");
 const bcrypt= require("bcrypt");
-
+const jwt = require("jsonwebtoken");
 
 mongoose.set('useNewUrlParser', true);
 mongoose.connect("mongodb+srv://hobby-admin:kKpUVRG0UMvrOk0e@hobby.gtw16.mongodb.net/hobby-learning?retryWrites=true&w=majority")
@@ -14,11 +14,6 @@ mongoose.connect("mongodb+srv://hobby-admin:kKpUVRG0UMvrOk0e@hobby.gtw16.mongodb
     console.log("Databse Connection failed");
   });
 
-
-  router.post("/login",(req,res)=>{
-    const user = new User({email: "" ,password : ""});
-   
-  });
   router.post("/signup",(req,res)=>{
     bcrypt.hash(req.body.password,10).then(hash => {
       const user = new User(
@@ -42,9 +37,45 @@ mongoose.connect("mongodb+srv://hobby-admin:kKpUVRG0UMvrOk0e@hobby.gtw16.mongodb
             });
         });
     });
-   
-
-   
   });
-  module.exports= router;
+    router.post("/login", (req,res)=>{
+      let fetchedUser;
+        User.findOne({email:req.body.email }).then(user => {
+            if(!user)
+            {
+            console.log("user not found");  
+            return res.status(401).json({
+              message: "Auth failed"
+            });
+          }
+          else{
+            fetchedUser = user;
+           return bcrypt.compare(req.body.password,user.password);
+          }
+        }).then(result =>{
+            if(!result){
+              return res.status(401).json({
+                message: "Auth failed"
+              });
+            }
+            else{
+              const token = jwt.sign(
+                {
+                  email : fetchedUser.email , 
+                  userid : fetchedUser._id 
+                },'secret_this_should_be_longer',{expiresIn : '1h'});
+                res.status(200).json({
+                  token :token
+                });
+            }
+        })
+        .catch(err=>{
+          return res.status(401).json({
+            message: "Auth failed"
+          })
+        });
+    });
+ 
+
+module.exports= router;
   
