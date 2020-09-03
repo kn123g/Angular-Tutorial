@@ -4,6 +4,7 @@ const router = express.Router();
 const Post = require("../Models/post");
 const PostWImage = require("../Models/postWImage");
 const multer = require("multer");
+const checkAuth = require("../middleware/check-auth");
 
 const MIME_TYPE_MAP = {
   "image/png": "png",
@@ -42,7 +43,7 @@ mongoose.connect("mongodb+srv://hobby-admin:kKpUVRG0UMvrOk0e@hobby.gtw16.mongodb
   });
 
 
-router.post("/",(req,res)=>{
+router.post("/",checkAuth,(req,res)=>{
   const post = new Post({
     title : req.body.title,
     content : req.body.content
@@ -54,7 +55,7 @@ router.post("/",(req,res)=>{
     id:post._id
   });
 });
-router.post("/reactive",  multer({ storage: storage }).single("image"),(req,res)=>{
+router.post("/reactive", checkAuth, multer({ storage: storage }).single("image"),(req,res)=>{
   const url = req.protocol + "://" + req.get("host");
   const post = new PostWImage({
     title : req.body.title,
@@ -74,7 +75,7 @@ router.post("/reactive",  multer({ storage: storage }).single("image"),(req,res)
   console.log(post);
  });  
 
-router.put("/:id",(req,res)=>{
+router.put("/:id",checkAuth,(req,res)=>{
     const post = new Post({
       _id : req.body.id,
       title : req.body.title,
@@ -85,7 +86,7 @@ router.put("/:id",(req,res)=>{
     res.status(200).json({message: "update successfull"});
   });
 });
-router.put("/reactive/:id",  multer({ storage: storage }).single("image"),(req,res)=>{
+router.put("/reactive/:id", checkAuth, multer({ storage: storage }).single("image"),(req,res)=>{
   const url = req.protocol + "://" + req.get("host");
   let imagePath = req.body.imagePath;
   if (req.file) {
@@ -140,7 +141,7 @@ router.get("/image",(req,res,next)=> {
   });
 });
 
-router.get("/edit/:id", (req, res, next) => {
+router.get("/edit/:id",checkAuth, (req, res, next) => {
   console.log("posts.js => " +req.params.id);
   Post.findById(req.params.id).then(post => {
     if (post) {
@@ -151,7 +152,7 @@ router.get("/edit/:id", (req, res, next) => {
     }
   });
 });
-router.get("/editImage/:id", (req, res, next) => {
+router.get("/editImage/:id",checkAuth, (req, res, next) => {
   console.log("posts.js editImage=> " +req.params.id);
   PostWImage.findById(req.params.id).then(post => {
     if (post) {
@@ -169,7 +170,7 @@ router.delete("/:id",(req,res,next)=> {
   })
 });
 
-router.delete("/image/:id",(req,res,next)=> {
+router.delete("/image/:id",checkAuth,(req,res,next)=> {
   console.log("router.js => deleting image uuid");
   PostWImage.deleteOne({_id:req.params.id}).then(result => {
     res.status(200).json({message:"Post deleted"});

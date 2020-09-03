@@ -8,12 +8,13 @@
   </button>
 
   <button mat-raised-button color="primary" routerLink="/home"><span>Home</span></button>
-  <button mat-raised-button color="primary" routerLink="/create"><span>Create</span></button>
+  <button mat-raised-button color="primary" *ngIf="userAuthentication" routerLink="/create"><span>Create</span></button>
   <button mat-raised-button color="primary" routerLink="/message"><span>Messages</span></button>
-  <button mat-raised-button color="primary" routerLink="/reactivePostCreate"><span>ReactiveCreate</span></button>
+  <button mat-raised-button color="primary" *ngIf="userAuthentication" routerLink="/reactivePostCreate"><span>ReactiveCreate</span></button>
   <button mat-raised-button color="primary" routerLink="/message-image"><span>ImageMessages</span></button>
-  <button mat-raised-button color="primary" routerLink="/login"><span>Login</span></button>
-  <button mat-raised-button color="primary" routerLink="/signup"><span>Signup</span></button>
+  <button mat-raised-button color="primary" *ngIf="!userAuthentication" routerLink="/login"><span>Login</span></button>
+  <button mat-raised-button color="primary" *ngIf="!userAuthentication" routerLink="/signup"><span>Signup</span></button>
+  <button mat-raised-button color="primary" *ngIf="userAuthentication" (click) = "onLogout()" ><span>Logout</span></button>
   <span class="example-spacer"></span>
   <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
     <mat-icon>favorite</mat-icon>
