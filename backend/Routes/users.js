@@ -65,7 +65,8 @@ mongoose.connect("mongodb+srv://hobby-admin:kKpUVRG0UMvrOk0e@hobby.gtw16.mongodb
                   userid : fetchedUser._id 
                 },'secret_this_should_be_longer',{expiresIn : '1h'});
                 res.status(200).json({
-                  token :token
+                  token :token,
+                  expiresIn: 3600
                 });
             }
         })

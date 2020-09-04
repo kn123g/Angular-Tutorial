@@ -18,6 +18,7 @@ export class HeaderComponent {
 
   }
   ngOnInit(){
+    this.userAuthentication=this.authService.getUserAuthentication();
     this.authListenerSubs = this.authService.getAuthStatusListener().subscribe(isAuthenticated =>{
       this.userAuthentication = isAuthenticated; 
     });

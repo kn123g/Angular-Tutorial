@@ -19,6 +19,7 @@ export class SignupComponent {
       return ;
     }
     else{
+      this.isLoading  = true;
        this.authService.createUser(signupForm.value.email,signupForm.value.password);
     }
   }
