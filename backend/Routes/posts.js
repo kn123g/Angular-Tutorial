@@ -46,7 +46,8 @@ mongoose.connect("mongodb+srv://hobby-admin:kKpUVRG0UMvrOk0e@hobby.gtw16.mongodb
 router.post("/",checkAuth,(req,res)=>{
   const post = new Post({
     title : req.body.title,
-    content : req.body.content
+    content : req.body.content,
+    creator : req.userData.userID
   });
   post.save();
   console.log(post);
@@ -60,7 +61,8 @@ router.post("/reactive", checkAuth, multer({ storage: storage }).single("image")
   const post = new PostWImage({
     title : req.body.title,
     content : req.body.content,
-    image: url + "/images/" + req.file.filename
+    image: url + "/images/" + req.file.filename,
+    creator : req.userData.userID
   });
   console.log("posts.js => file path : " +url + "/images/" + req.file.filename)
   post.save().then( createdPost => {
@@ -82,7 +84,7 @@ router.put("/:id",checkAuth,(req,res)=>{
       content : req.body.content
     });
     console.log("router.js = > updating");
-  Post.updateOne({_id:req.params.id},post).then(result=>{
+  Post.updateOne({_id:req.params.id, creator: req.userData.userID},post).then(result=>{
     res.status(200).json({message: "update successfull"});
   });
 });
@@ -97,10 +99,11 @@ router.put("/reactive/:id", checkAuth, multer({ storage: storage }).single("imag
     _id : req.body.id,
     title : req.body.title,
     content : req.body.content,
-    image: imagePath
+    image: imagePath,
+    creator : req.userData.userID
   });
   console.log("router.js = > updating");
-  PostWImage.updateOne({_id:req.params.id},post).then(result=>{
+  PostWImage.updateOne({_id:req.params.id, creator: req.userData.userID},post).then(result=>{
   res.status(200).json({message: "update successfull"});
 });
 });
@@ -165,15 +168,23 @@ router.get("/editImage/:id",checkAuth, (req, res, next) => {
 });
 router.delete("/:id",(req,res,next)=> {
   console.log("router.js => deleting uuid");
-  Post.deleteOne({_id:req.params.id}).then(result => {
-    res.status(200).json({message:"Post deleted"});
+  Post.deleteOne({_id:req.params.id, creator: req.userData.userID}).then(result => {
+    if (result.n > 0) {
+      res.status(200).json({ message: "Deletion successful!" });
+    } else {
+      res.status(401).json({ message: "Not authorized to delete!" });
+    }
   })
 });
 
 router.delete("/image/:id",checkAuth,(req,res,next)=> {
   console.log("router.js => deleting image uuid");
-  PostWImage.deleteOne({_id:req.params.id}).then(result => {
-    res.status(200).json({message:"Post deleted"});
+  PostWImage.deleteOne({_id:req.params.id, creator: req.userData.userID }).then(result => {
+    if (result.n > 0) {
+      res.status(200).json({ message: "Deletion successful!" });
+    } else {
+      res.status(401).json({ message: "Not authorized to delete!" });
+    }
   })
 });
 

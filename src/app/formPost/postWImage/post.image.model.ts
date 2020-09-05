@@ -3,5 +3,6 @@ export interface PostImage{
     title:string;
     content:string;
     image:string;
+    creator:string;
   }
   

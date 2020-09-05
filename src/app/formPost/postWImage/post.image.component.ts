@@ -15,6 +15,7 @@ export class FormImagePostComponent implements OnInit, OnDestroy {
 
   
   panelOpenState=false;
+  userId  : string;
    posts : PostImage[] = [];
    private postsub : Subscription;
    private authListenerSubs : Subscription;
@@ -31,6 +32,7 @@ export class FormImagePostComponent implements OnInit, OnDestroy {
   ngOnInit() :void {
 
      this.postservice.getPostImage(this.postPerPage, this.currentPage);
+     this.userId= this.authService.getUserId();
      this.postsub=  this.postservice.getPosImageUpdatedListener()
      .subscribe((posts: {Post: PostImage[], postCount: number}) => {
           this.posts = posts.Post;

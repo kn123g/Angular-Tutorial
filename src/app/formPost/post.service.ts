@@ -25,7 +25,8 @@ export class PostService{
             return {
               id:post._id,
               title:post.title,
-              content:post.content
+              content:post.content,
+              creator:post.creator
             }
           })
     })).
@@ -39,14 +40,13 @@ export class PostService{
   }
 
   getPostForEdit(id: string) {
-
-    return this.http.get<{ id: string; title: string; content: string }>(
+    return this.http.get<{ id: string; title: string; content: string,creator:string }>(
       "http://localhost:3000/api/posts/edit/" + id
     );
   }
   getPostImageForEdit(id: string) {
 
-    return this.http.get<{ id: string; title: string; content: string,image: string }>(
+    return this.http.get<{ id: string; title: string; content: string,image: string,creator:string }>(
       "http://localhost:3000/api/posts/editImage/" + id
     );
   }
@@ -138,7 +138,8 @@ updateReactivePost(id:string ,title :string ,content :string,image : File  | str
       id: id,
       title: title,
       content: content,
-      image: image
+      image: image,
+      creator : null
     };
   }
   console.log("post.service.ts => updating data   " + title + "   " +content);
@@ -179,7 +180,8 @@ getPostImage(postPerPage : number,currentPage : number){
             title: post.title,
             content: post.content,
             id: post._id,
-            image: post.image
+            image: post.image,
+            creator:post.creator
           };
         }),
         maxPosts: postData.maxPosts

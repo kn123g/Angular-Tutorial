@@ -27,13 +27,14 @@ mongoose.connect("mongodb+srv://hobby-admin:kKpUVRG0UMvrOk0e@hobby.gtw16.mongodb
           console.log(result);
             res.status(201).json({
                 message:"user created",
-                result : result
+                result : {email : result.email,userid : result._id},
+                created : true
             });
         } )
         .catch(err => {
           console.log("user.js  => failed user creation");
             res.status(401).json({
-            error: err
+            error: "failed user creation",
             });
         });
     });
@@ -66,7 +67,8 @@ mongoose.connect("mongodb+srv://hobby-admin:kKpUVRG0UMvrOk0e@hobby.gtw16.mongodb
                 },'secret_this_should_be_longer',{expiresIn : '1h'});
                 res.status(200).json({
                   token :token,
-                  expiresIn: 3600
+                  expiresIn: 3600,
+                  userId : fetchedUser._id
                 });
             }
         })
