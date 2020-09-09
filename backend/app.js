@@ -7,9 +7,7 @@ const postRouter = require("./Routes/posts");
 const userRouter = require("./Routes/users"); 
 const path = require("path");
 
-
 mongoose.set('useNewUrlParser', true);
-
 mongoose.connect("mongodb+srv://hobby-admin:" + process.env.MONGO_ATLAS_PASSWORD+ "@hobby.gtw16.mongodb.net/hobby-learning?retryWrites=true&w=majority")
   .then(()=>{
     console.log("Databse Connected Successfully");
@@ -28,7 +26,7 @@ app.use((req,res,next)=>{
 });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/images", express.static(path.join("backend/images")));
+app.use("/images", express.static(path.join("images")));
 
 //app.use(cookieParser());
 //app.use(upload.array());

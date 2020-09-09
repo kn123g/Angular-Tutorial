@@ -13,7 +13,7 @@ const MIME_TYPE_MAP = {
       if (isValid) {
         error = null;
       }
-      cb(error, "backend/images");
+      cb(error, "images");
       console.log("posts.js => destination error : " + error);
     },
     filename: (req, file, cb) => {
