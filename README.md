@@ -1,3 +1,9 @@
+# Things to do
+
+goto path : \Angular-Tutorial\backend\  and run npm run start:server command
+goto path : \Angular-Tutorial\  and run ng serve command
+load url : http://localhost:4200/ in any browser
+
 # Tutorial
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.3.
