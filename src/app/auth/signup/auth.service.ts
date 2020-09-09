@@ -3,7 +3,9 @@ import {HttpClient} from "@angular/common/http";
 import {AuthDataModel} from "./auth.data-model";
 import {Subject} from "rxjs";
 import {Router} from "@angular/router"
+import {environment} from '../../../environments/environment';
 
+const BACKEND_URL = environment.apiURL + "/user/";
 @Injectable({providedIn:"root"})
 export class AuthService{
 
@@ -28,26 +30,28 @@ export class AuthService{
     createUser(email : string,password :string)
     {   
         const authData : AuthDataModel = {email:email,password:password};
-        this.http.post<{message:string,result:{email:string,_id:string},created:boolean}>("http://localhost:3000/api/user/signup",authData).subscribe(
-            response => {
-               console.log("auth.service.ts : ");console.log( response  );
-                if(response.created){
-                 this.router.navigate(['/']);
-                }
-              
-      });
+        this.http.post<{message:string,result:{email:string,_id:string},created:boolean}>
+        ( BACKEND_URL + "signup",authData).subscribe(
+          res => {
+            console.log(res);
+           this.router.navigate(['/login']);
+
+          },err => {
+            this.authStatusListener.next(false);
+            console.log(err);
+            console.log(this.authStatusListener);
+     });
      
     }
 
     loginUser(email : string,password :string)
     {   
         const authData : AuthDataModel = {email:email,password:password};
-        this.http.post<{token:string,expiresIn:number,userId : string}>("http://localhost:3000/api/user/login",authData).subscribe(
+        this.http.post<{token:string,expiresIn:number,userId : string}>( BACKEND_URL + "login",authData).subscribe(
             response => {
                 console.log("auth.service.ts" + response.token);
                 const token = response.token;
                 this.token= token;
-               
                 if(token)
                 {
                     const expiresInDuration = response.expiresIn;
@@ -63,6 +67,9 @@ export class AuthService{
                     
                 }
               
+      },
+          err => {
+             this.authStatusListener.next(false);
       });
     }
     autoAuthUser() {

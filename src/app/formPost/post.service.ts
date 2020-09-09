@@ -6,7 +6,9 @@ import {HttpClient} from "@angular/common/http";
 import { catchError, map, tap } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
 import { Router } from "@angular/router";
+import {environment} from '../../environments/environment';
 
+const BACKEND_URL = environment.apiURL + "/posts/";
 @Injectable({providedIn : 'root'}) //injected to root app module
 export class PostService{
   private posts : Post[] =[];
@@ -19,7 +21,7 @@ export class PostService{
 
   getPost(){
     //return [...this.posts]; ///copying array//return [...this.posts]; -> this pass reference address
-    this.http.get<{message:string,posts:any[]}>('http://localhost:3000/api/posts').
+    this.http.get<{message:string,posts:any[]}>(BACKEND_URL).
     pipe(map((postsData)=>{
           return postsData.posts.map(post=>{
             return {
@@ -41,19 +43,19 @@ export class PostService{
 
   getPostForEdit(id: string) {
     return this.http.get<{ id: string; title: string; content: string,creator:string }>(
-      "http://localhost:3000/api/posts/edit/" + id
+      BACKEND_URL + "edit/" + id
     );
   }
   getPostImageForEdit(id: string) {
 
     return this.http.get<{ id: string; title: string; content: string,image: string,creator:string }>(
-      "http://localhost:3000/api/posts/editImage/" + id
+      BACKEND_URL + "editImage/" + id
     );
   }
   addPost(title :string ,content :string){
       const post : Post = {id:null,title : title,content:content};
       console.log("post.service.ts => posting data   " + post.title + "   " +post.content);
-      this.http.post<{message:string,id:string}>('http://localhost:3000/api/posts',post).
+      this.http.post<{message:string,id:string}>(BACKEND_URL,post).
       subscribe((responseData)=>{
           console.log("posted");
           console.log(responseData.message);
@@ -66,8 +68,8 @@ export class PostService{
   }
   deletePost(postid:string){
     console.log("app.js => deleting uuid: " +postid);
-    console.log("http://localhost:3000/api/posts/" + postid);
-    this.http.delete("http://localhost:3000/api/posts/" + postid).subscribe(()=>{
+    console.log(BACKEND_URL + postid);
+    this.http.delete(BACKEND_URL + postid).subscribe(()=>{
         const updatedPosts = this.posts.filter(post=> post.id!== postid);
         this.posts = updatedPosts;
         this.postUpdated.next([...this.posts]);
@@ -75,21 +77,21 @@ export class PostService{
   }
   deletePostImage(postid:string){
     console.log("app.js => deleting uuid: " +postid);
-    console.log("http://localhost:3000/api/posts/image/" + postid);
-    return this.http.delete("http://localhost:3000/api/posts/image/" + postid);
-    //.subscribe(
-      //()=>{
-        // const updatedPosts = this.postsImage.filter(post=> post.id!== postid);
-        // this.postsImage = updatedPosts;
-        // this.postImageUpdated.next([...this.postsImage]);
+    console.log(BACKEND_URL + "image/" + postid);
+    return this.http.delete(BACKEND_URL + "image/" + postid);
+    // .subscribe(
+    //   ()=>{
+    //     const updatedPosts = this.postsImage.filter(post=> post.id!== postid);
+    //     this.postsImage = updatedPosts;
+    //     this.postImageUpdated.next({Post : [...this.postsImage],postCount : this.postsImage.length});
        
-      //}
-      //);
+    //   }
+    //   );
   }
   updatePost(id:string ,title :string ,content :string){
     const post : Post = {id:id,title : title,content:content};
     console.log("post.service.ts => updating data   " + post.title + "   " +post.content);
-    this.http.put<{message:string}>('http://localhost:3000/api/posts/' + id,post).
+    this.http.put<{message:string}>(BACKEND_URL + id,post).
     subscribe((responseData)=>{
         console.log("post.service = > updating");
         console.log(responseData.message);
@@ -111,7 +113,7 @@ addReactivePost(title :string ,content :string,image : File){
   console.log("post.service.ts => posting data   " + title + "   " + content);
   console.log(image);
   this.http.
-  post<{message:string,post:any}>('http://localhost:3000/api/posts/reactive/',postData).
+  post<{message:string,post:any}>(BACKEND_URL + 'reactive/',postData).
   subscribe((responseDataReactive)=>{
       console.log("posted");
       console.log(responseDataReactive.message);
@@ -122,6 +124,7 @@ addReactivePost(title :string ,content :string,image : File){
       // this.postsImage.push(post);
       // this.postImageUpdated.next([...this.postsImage]);
       this.route.navigate(["/message-image"]);
+      
   });
 
 }
@@ -143,7 +146,7 @@ updateReactivePost(id:string ,title :string ,content :string,image : File  | str
     };
   }
   console.log("post.service.ts => updating data   " + title + "   " +content);
-  this.http.put<{message:string}>('http://localhost:3000/api/posts/reactive/' + id,post).
+  this.http.put<{message:string}>(BACKEND_URL + 'reactive/' + id,post).
   subscribe((responseData)=>{
     
 
@@ -170,7 +173,7 @@ getPostImage(postPerPage : number,currentPage : number){
 
   const queryParams = `?pagesize=${postPerPage}&currentpage=${currentPage}`;
   //return [...this.posts]; ///copying array//return [...this.posts]; -> this pass reference address
-  this.http.get<{message:string,posts:any[],maxPosts: number}>('http://localhost:3000/api/posts/image' 
+  this.http.get<{message:string,posts:any[],maxPosts: number}>(BACKEND_URL + 'image' 
   + queryParams)
   .pipe(
     map(postData => {
@@ -189,6 +192,7 @@ getPostImage(postPerPage : number,currentPage : number){
     })
   ).
   subscribe((tranformedPostsData)=>{
+    console.log("tranformedPostsData");
     console.log(tranformedPostsData);
     this.postsImage = tranformedPostsData.posts;
     this.postImageUpdated.next({

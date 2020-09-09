@@ -5,9 +5,8 @@ import {FormPostComponent} from './formPost/post/post.component';
 import {BodyComponent} from './body.component/body.component';
 import {ReactiveCardComponent} from './formPost/reactive-card/reactive-card.component';
 import {FormImagePostComponent} from './formPost/postWImage/post.image.component';
-import {LoginComponent} from './auth/login/login.component';
-import {SignupComponent}from './auth/signup/signup.component';
 import {AuthGuard} from './auth/signup/auth-guard';
+
 const routes: Routes = [
   {path : 'home',component : BodyComponent},
   {path : 'create',component : FormCardComponent, canActivate: [AuthGuard]},
@@ -17,8 +16,8 @@ const routes: Routes = [
   {path : 'reactivePostCreate',component : ReactiveCardComponent, canActivate: [AuthGuard]},
   //{path : 'reactivePostCreate/:postId',component : ReactiveCardComponent},
   {path : 'message-image',component : FormImagePostComponent},
-  {path : 'login',component : LoginComponent},
-  {path : 'signup',component : SignupComponent}
+  {path : 'auth', loadChildren: "./auth/signup/auth-routing.module#AuthRoutingModule"}
+
 ];
 
 @NgModule({

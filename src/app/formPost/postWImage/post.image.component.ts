@@ -2,7 +2,7 @@ import { Component, OnInit,Input, OnDestroy } from '@angular/core';
 import {PostImage} from './post.image.model';
 import {PostService} from '../post.service';
 import {Subscription} from "rxjs";
-import { PageEvent } from '@angular/material/paginator';
+import {PageEvent } from '@angular/material/paginator';
 import {AuthService} from "../../auth/signup/auth.service";
 
 
@@ -51,7 +51,7 @@ export class FormImagePostComponent implements OnInit, OnDestroy {
     console.log("post.component => trying delete")
     this.postservice.deletePostImage(postid).subscribe(()=>
     {
-      this.postservice.getPostImage(this.postPerPage,this.currentPage);
+      this.postservice.getPostImage(this.postPerPage,this.currentPage -1);
     });
   }
   ngOnDestroy():void{

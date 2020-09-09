@@ -3,61 +3,36 @@ import { NgModule } from '@angular/core';
 import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {MatButtonModule} from '@angular/material/button';
-import {MatFormFieldModule} from '@angular/material/form-field';
 import{HeaderComponent} from '../header.component/header.component';
-import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatCardModule} from '@angular/material/card';
-import {MatInputModule} from '@angular/material/input';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatIconModule} from '@angular/material/icon';
 import { BodyComponent } from './body.component/body.component';
-import { CardComponent } from './card/card.component';
-import { PostComponent } from './post/post.component';
-import { FormPostComponent } from './formPost/post/post.component';
-import { FormImagePostComponent } from './formPost/postWImage/post.image.component';
-import { FormCardComponent } from './formPost/card/card.component';
-import {MatExpansionModule} from '@angular/material/expansion';
-import { ReactiveCardComponent } from './formPost/reactive-card/reactive-card.component';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {LoginComponent} from './auth/login/login.component';
-import{SignupComponent} from './auth/signup/signup.component';
 import {AuthInterceptor} from "./auth/signup/auth-interceptor";
+import { ErrorInterceptor } from "./error-interceptor";
+import {  AngularMaterialModule } from './angular-material.module'
+import {  ErrorComponent } from './error/error.component';
+import {  AuthModule } from '../app/auth/signup/auth-module';
+import {  PostModule } from '../app/formPost/post-module';
+
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent, 
-    BodyComponent, 
-    CardComponent, 
-    PostComponent,
-    FormCardComponent,
-    FormPostComponent, 
-    ReactiveCardComponent,
-    FormImagePostComponent,
-    LoginComponent,
-    SignupComponent
+    BodyComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    FormsModule,
-    ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatCardModule,
-    MatInputModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatExpansionModule,
     HttpClientModule,
-    MatProgressSpinnerModule,
-    MatPaginatorModule
-
+    AngularMaterialModule,
+    AuthModule,
+    PostModule
   ],
-  providers: [{provide : HTTP_INTERCEPTORS,useClass : AuthInterceptor,multi:true}],
-  bootstrap: [AppComponent]
+  providers: [{provide : HTTP_INTERCEPTORS,useClass : AuthInterceptor,multi:true},
+    {provide : HTTP_INTERCEPTORS,useClass : ErrorInterceptor,multi:true}
+],
+  bootstrap: [AppComponent],
+  entryComponents: [ErrorComponent]
 })
 export class AppModule { }

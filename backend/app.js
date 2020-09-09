@@ -7,6 +7,18 @@ const postRouter = require("./Routes/posts");
 const userRouter = require("./Routes/users"); 
 const path = require("path");
 
+
+mongoose.set('useNewUrlParser', true);
+
+mongoose.connect("mongodb+srv://hobby-admin:" + process.env.MONGO_ATLAS_PASSWORD+ "@hobby.gtw16.mongodb.net/hobby-learning?retryWrites=true&w=majority")
+  .then(()=>{
+    console.log("Databse Connected Successfully");
+  })
+  .catch(()=>{
+    console.log("Databse Connection failed");
+  });
+
+  
 app.use((req,res,next)=>{
   res.setHeader('Access-Control-Allow-Origin',"*");
   res.setHeader('Access-Control-Allow-Headers',"Origin,X-Requested-with,Content-Type,Accept,Authorization");
