@@ -1,3 +1,6 @@
+# Things to do
+Go to path \Angular-Tutorial\backend\README.md and follow.
+
 # Tutorial
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.3.
