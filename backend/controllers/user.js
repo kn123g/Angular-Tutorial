@@ -54,7 +54,8 @@ exports.createUser = (req,res)=>{
               {
                 email : fetchedUser.email , 
                 userid : fetchedUser._id 
-              },process.env.JWT_KEY,{expiresIn : '1h'});
+              },
+              process.env.JWT_KEY,{expiresIn : '1h'});
               res.status(200).json({
                 token :token,
                 expiresIn: 3600,
