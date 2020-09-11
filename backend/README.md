@@ -10,6 +10,8 @@ MONGO_ATLAS_PASSWORD=kKpUVRG0UMvrOk0e
 goto path : \Angular-Tutorial\ run ng built --prod 
 ready deploye path \Angular-Tutorial\backend\ to host
 
+Example : http://angulartutorialpostapp-env.eba-c2yjsxze.us-east-2.elasticbeanstalk.com/
+
 # Tutorial
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.3.
