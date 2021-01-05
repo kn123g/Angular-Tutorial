@@ -5,8 +5,8 @@ const mongoose = require("mongoose");
 const app = express();
 const postRouter = require("./Routes/posts"); 
 const userRouter = require("./Routes/users"); 
-const gmkknits_API_Router = require("./Routes/gmkknits_api"); 
 const path = require("path");
+const gmkknitsAPIRouter = require("./Routes/gmkknits_api");
 
 mongoose.set('useNewUrlParser', true);
 mongoose.connect("mongodb+srv://hobby-admin:" + process.env.MONGO_ATLAS_PASSWORD+ "@hobby.gtw16.mongodb.net/hobby-learning?retryWrites=true&w=majority")
@@ -27,16 +27,14 @@ app.use((req,res,next)=>{
 });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/images", express.static(path.join(__dirname,"images")));	
+app.use("/images", express.static(path.join(__dirname,"images")));
 app.use("/", express.static(path.join(__dirname , "dist/angular")));
-
 //app.use(cookieParser());
 //app.use(upload.array());
 app.use("/api/posts",postRouter);
 app.use("/api/user",userRouter);
-app.use("/api/gmkknits",gmkknits_API_Router);
+app.use("/api/gmkknits",gmkknitsAPIRouter);
 app.use((req, res, next) => {
   res.sendFile(path.join(__dirname ,"dist/angular","index.html"));
 });
-
 module.exports = app;
